@@ -31,7 +31,8 @@ const Home = () => {
       const url =
          'https://accounts.spotify.com/authorize?' +
          queryString.stringify(params);
-      window.location.href = url;
+
+      window.location = url;
    };
 
    return (
