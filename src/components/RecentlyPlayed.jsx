@@ -28,7 +28,7 @@ const RecentlyPlayed = () => {
                         <Image src={img}/>
                      </Box>
 
-                     <VStack alignItems='flex-start'>
+                     <VStack alignItems='flex-start' maxW='calc(100% - 150px)' textAlign='start'>
                         <Text fontWeight='bold'>{track?.name} </Text>
                         <Text>{track?.album?.name}  </Text>
                         <Text>{format(played_at)}</Text>
