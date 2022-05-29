@@ -15,6 +15,8 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
    const handleLogin = () => {
+      const base = window.location.origin;
+
       const client_id = import.meta.env
          .VITE_SPOTIFY_CLIENT_ID;
 
@@ -22,7 +24,7 @@ const Home = () => {
          client_id,
          response_type: 'code',
          redirect_uri:
-            'http://localhost:3000/general',
+            `${base}/general`,
          scope: 'user-read-recently-played user-top-read',
       };
 

@@ -18,11 +18,12 @@ export const setToken = createAsyncThunk(
    'spotify/setToken',
    async (userCode) => {
       const url = 'https://accounts.spotify.com/api/token';
-      
+      const base = window.location.origin;
+
       const body = {
          grant_type: "authorization_code",
          code: userCode,
-         redirect_uri: 'http://localhost:3000/general'
+         redirect_uri: `${base}/general`
       }
 
       const config = getAxiosGetTokenConfig();
@@ -75,8 +76,11 @@ export const getRecentlyPlayedTracks = createAsyncThunk(
 
 export const getUserTop = createAsyncThunk(
    'spotify/getUserTop',
-   async(type, {getState}) => {
-      const url = ApiUrl + `me/top/${type}`;
+   async({ type, timeRange = 'short_term', limit='50' }, { dispatch, getState}) => {
+      dispatch(startLoading());
+
+      const url = 
+         ApiUrl + `me/top/${type}?time_range=${timeRange}&limit=${limit}`;
 
       const token = getState().spotify.token.access_token;
       const config = getAxiosConfig({ token});
@@ -131,6 +135,8 @@ export const spotifySlice = createSlice({
          if(action.payload.type === 'tracks') {
             state.topTracks = action.payload.data
          }
+
+         state.isLoading = false;
       }
    }
 });

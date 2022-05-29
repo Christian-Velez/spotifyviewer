@@ -29,7 +29,7 @@ const RecentlyPlayed = () => {
                      </Box>
 
                      <VStack alignItems='flex-start'>
-                        <Text>{track?.name} </Text>
+                        <Text fontWeight='bold'>{track?.name} </Text>
                         <Text>{track?.album?.name}  </Text>
                         <Text>{format(played_at)}</Text>
                      </VStack>
