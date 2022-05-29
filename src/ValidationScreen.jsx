@@ -2,9 +2,10 @@ import { setToken } from './store/spotifySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
+import StatsScreen from './StatsScreen';
 
 
-const GeneralStats = () => {
+const ValidationScreen = () => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
    const search = useLocation().search;
@@ -33,16 +34,12 @@ const GeneralStats = () => {
    }, [setTokenSuccessfully]);
 
    return (
-      <div>
-         {
-            !token.access_token
-               ? <p>Loading...</p>
-               : <p>Ya puedo mostrar la data</p>
-         }
-      </div>
+      !token.access_token
+         ? <p>Loading...</p>
+         : <StatsScreen />
    );
 };
 
-GeneralStats.propTypes = {};
+ValidationScreen.propTypes = {};
 
-export default GeneralStats;
+export default ValidationScreen;

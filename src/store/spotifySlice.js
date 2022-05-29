@@ -6,8 +6,11 @@ import queryString from 'query-string';
 const initialState = {
    token: {},
    setTokenSuccessfully: true,
+   isLoading: false,
+
    topArtists: [],
    recentlyPlayed: [],
+   topTracks: [],
 };
 
 
@@ -30,6 +33,18 @@ export const setToken = createAsyncThunk(
    }
 );
 
+export const getUserInfo = createAsyncThunk(
+   'spotify/getUserInfo',
+   async(_, { getState }) => {
+      const url = ApiUrl + 'me';
+      const token = getState().spotify.token.access_token;
+      const config = getAxiosConfig({ token });
+      const { data } = await axios.get(url, config);
+      console.log(data)
+
+   }
+)
+
 
 export const getGenres = createAsyncThunk(
    'spotify/getGenres',
@@ -45,7 +60,10 @@ export const getGenres = createAsyncThunk(
 export const getRecentlyPlayedTracks = createAsyncThunk(
    'spotify/getRecentlyPlayed',
 
-   async(_, { getState}) => {
+   async(_, { dispatch, getState}) => {
+      dispatch(startLoading());
+
+
       const url = ApiUrl + 'me/player/recently-played';
 
       const token = getState().spotify.token.access_token;
@@ -64,8 +82,10 @@ export const getUserTop = createAsyncThunk(
       const config = getAxiosConfig({ token});
       const { data } = await axios.get(url, config);
       
-
-      return data;
+      return {
+         type,
+         data
+      }
    }
 )
 
@@ -80,7 +100,13 @@ export const spotifySlice = createSlice({
    name: 'spotify',
    initialState,
    reducers: {
-     
+      startLoading(state) {
+         state.isLoading = true;
+      },
+
+      finishLoading: (state) => {
+         state.isLoading = false;
+      }
    },
 
    extraReducers: {
@@ -93,12 +119,21 @@ export const spotifySlice = createSlice({
 
       [getRecentlyPlayedTracks.fulfilled]: (state, action) => {
          state.recentlyPlayed = action.payload
+         state.isLoading = false;
       },
 
       [getUserTop.fulfilled]: (state, action) => {
-         state.topArtists = action.payload
+
+         if(action.payload.type === 'artists') {
+            state.topArtists = action.payload.data;
+         }
+
+         if(action.payload.type === 'tracks') {
+            state.topTracks = action.payload.data
+         }
       }
    }
 });
 
+export const { startLoading, finishLoading } = spotifySlice.actions;
 export default spotifySlice.reducer;

@@ -3,11 +3,20 @@ import {
    BrowserRouter,
    Route,
    Routes,
-   useNavigate,
 } from 'react-router-dom';
-import Home from './Home';
-import GeneralStats from './GeneralStats';
-import { useSelector } from 'react-redux';
+import HomeScreen from './HomeScreen';
+import ValidationScreen from './ValidationScreen';
+
+
+/*
+   colores
+   #0C0C0C black
+   #69DC9E green
+   #FFFFFF white
+
+
+*/
+
 
 const App = () => {   
    return (
@@ -15,11 +24,11 @@ const App = () => {
          <Routes>
             <Route
                path='/general'
-               element={<GeneralStats />}
+               element={<ValidationScreen />}
             />
             <Route
                path='/'
-               element={<Home />}
+               element={<HomeScreen />}
             />
          </Routes>
       </BrowserRouter>
